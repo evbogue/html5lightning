@@ -5,7 +5,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 <script src='https://cdn.jsdelivr.net/npm/davidshimjs-qrcodejs@0.0.2/qrcode.min.js'></script>
 <script>
-  hljs.highlightAll()
+  //hljs.highlightAll()
 
   window.onload = function() {
     const codes = document.getElementsByTagName('code')
@@ -17,6 +17,9 @@
       hljs.highlightBlock(pres[i])
     }
   }
-
-  
+  setTimeout(() => {
+    new QRCode(document.getElementById("example1"), "https://html5lightning.deno.dev/example1.html")  
+    new QRCode(document.getElementById("example2"), "https://html5lightning.deno.dev/example2.html")  
+    new QRCode(document.getElementById("example3"), "https://html5lightning.deno.dev/example3.html")  
+  }, 500)
 </script>

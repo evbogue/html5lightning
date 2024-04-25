@@ -1,6 +1,6 @@
 import { joinRoom, selfId } from './trystero-torrent.min.js'
 
-const room = joinRoom({appId: 'my-first-chatapp', password: 'password'}, 'chatapp')
+const room = joinRoom({appId: 'example2', password: 'password'}, 'chatapp')
 
 const [send, receive] = room.makeAction('message')
 
@@ -11,7 +11,7 @@ const input = Object.assign(
       input.after(Object.assign(document.createElement('div'), {
         innerHTML: selfId + ' ' + input.value
        }))
-      send(input.value)
+      send({message: input.value})
       input.value = ''
     }
   }}
@@ -31,8 +31,8 @@ room.onPeerLeave(id => {
   if (id) {get.remove()}
 })
 
-receive((msg, id) => {
+receive((data, id) => {
   const msgDiv = document.createElement('div')
-  msgDiv.innerHTML = id + ' ' + msg
+  msgDiv.innerHTML = id + ' ' + data.message
   input.after(msgDiv)
 })

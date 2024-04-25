@@ -1,6 +1,6 @@
 import { joinRoom, selfId } from './trystero-torrent.min.js'
 
-const room = joinRoom({appId: 'my-first-chatapp', password: 'password'}, 'chatapp')
+const room = joinRoom({appId: 'example3', password: 'password'}, 'chatapp')
 
 const [send, receive] = room.makeAction('message')
 

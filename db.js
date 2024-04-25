@@ -4,6 +4,7 @@ db.title = `
   # How to turn a static website into a distributed chatroom using Trystero (WebRTC) and the Bog protocol
 
   (A five to ten minute talk)
+<hr>
 `
 
 db.bio = `
@@ -21,6 +22,8 @@ Find me:
 + ev@evbogue.com
 + [773-510-8601](tel:773-510-8601)
 + https://bogbook.com/#EVxe89AeRwmTT0hfrT7sHe0wAuzvH9Yvg9TFUgqPh4M=
+
+<hr>
 `
 
 db.intro = `
@@ -62,14 +65,20 @@ const input = Object.assign(
 )
 
 document.body.appendChild(input)
+
 \`\`\`
+
+https://html5lightning.deno.dev/example1.html
+
+<iframe src='./example1.html'></iframe>
+<div id='example1'></div>
 
 Distributing your chat messages is the hard part. 
 
 Most of the time we solve this by using a centralized chat server. 
 
-🤔 Can anyone name a popular chat server company?
-
+Questions?
+<hr>
 `
 
 db.trystero = `
@@ -86,7 +95,7 @@ import {joinRoom} from 'trystero'
 const room = joinRoom({appId: 'my-first-chatapp', password: 'password'}, 'chatapp')
 \`\`\`
 
-you can handle join/leaves and add a message handlers
+you can handle join/leaves and add message handlers
 
 \`\`\`
 room.onPeerJoin(id => {})
@@ -94,11 +103,145 @@ room.onPeerLeave(id => {})
 
 const [send, receive] = room.makeAction('message')
 
-receive(msg, id => {})
-send('hello world')
-send('hey ' + id, id)
+receive(data, id => { console.log(data.message)})
+send({message: 'hello world'})
+send({message: 'hey ' + id, id})
 \`\`\`
 
 With these simple tools you can turn a website into a chatroom!
+
+\`\`\`
+import { joinRoom, selfId } from './trystero-torrent.min.js'
+
+const room = joinRoom({appId: 'example2', password: 'password'}, 'chatapp')
+
+const [send, receive] = room.makeAction('message')
+
+const input = Object.assign(
+  document.createElement('input'),
+  { placeholder: 'Type into me',
+    onkeyup: ({key}) => { if (key === 'Enter') {
+      input.after(Object.assign(document.createElement('div'), {
+        innerHTML: selfId + ' ' + input.value
+       }))
+      send({message: input.value})
+      input.value = ''
+    }
+  }}
+)
+
+document.body.appendChild(input)
+
+room.onPeerJoin(id => {
+  const peerDiv = document.createElement('div')
+  peerDiv.id = id
+  peerDiv.textContent = id + ' joined the room.'
+  input.after(peerDiv)
+})
+
+room.onPeerLeave(id => {
+  const get = document.getElementById(id)
+  if (id) {get.remove()}
+})
+
+receive((data, id) => {
+  const msgDiv = document.createElement('div')
+  msgDiv.innerHTML = id + ' ' + data.message
+  input.after(msgDiv)
+})
+\`\`\`
+
+https://html5lightning.deno.dev/example2.html
+
+<iframe src='./example2.html'></iframe>
+<div id='example2'></div>
+
+<hr>
+
+`
+
+db.wave = `
+
+Here's an example where we do the coolest thing in Google Wave that no ne does anymore:
+
+\`\`\`
+import { joinRoom, selfId } from './trystero-torrent.min.js'
+
+const room = joinRoom({appId: 'example3', password: 'password'}, 'chatapp')
+
+const [send, receive] = room.makeAction('message')
+
+const [typing, typed] = room.makeAction('typing')
+
+const input = Object.assign(
+  document.createElement('input'),
+  { placeholder: 'Type into me',
+    oninput: () => {
+      const get = document.getElementById(selfId)
+      if (get) { get.remove()}
+      const newDiv = document.createElement('div')
+      newDiv.id = selfId
+      newDiv.textContent = selfId + ' ' + input.value
+      input.after(newDiv)
+      typing({typing: input.value})
+    },
+    onkeyup: ({key}) => { if (key === 'Enter') {
+      input.after(Object.assign(document.createElement('div'), {
+        innerHTML: selfId + ' ' + input.value
+       }))
+      send({message: input.value})
+      input.value = ''
+      const get = document.getElementById(selfId)
+      const got = get
+      get.remove()
+    }
+  }}
+)
+
+document.body.appendChild(input)
+
+const myDiv = document.createElement('div')
+
+myDiv.id = selfId
+myDiv.textContent = selfId + ' is here.'
+
+input.after(myDiv)
+
+room.onPeerJoin(id => {
+  const peerDiv = document.createElement('div')
+  peerDiv.id = id
+  peerDiv.textContent = id + ' is here.'
+  input.after(peerDiv)
+})
+
+room.onPeerLeave(id => {
+  const get = document.getElementById(id)
+  if (id) {get.remove()}
+})
+
+receive((data, id) => {
+  const msgDiv = document.createElement('div')
+  msgDiv.innerHTML = id + ' ' + data.message
+  input.after(msgDiv)
+  const get = document.getElementById(id)
+  if (get) { get.remove()}
+})
+
+typed((data, id) => {
+  const get = document.getElementById(id)
+  if (get) { get.remove() }
+  const peerDiv = document.createElement('div')
+  peerDiv.id = id
+  peerDiv.textContent = id + ' ' + data.typing
+  input.after(peerDiv)
+})
+
+
+\`\`\`
+
+https://html5lightning.deno.dev/example3.html
+
+<iframe src='./example3.html'></iframe>
+<div id='example3'></div>
 
 `
