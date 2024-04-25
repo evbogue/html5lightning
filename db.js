@@ -1,7 +1,7 @@
 export const db = {}
 
 db.title = `
-  # How to turn a static website into a distributed chatroom using Trystero (WebRTC) and the Bog protocol
+  # How to turn a static website into a distributed chatroom using Trystero and the Bog protocol
 
   (A five to ten minute talk)
 <hr>
@@ -28,9 +28,9 @@ Find me:
 
 db.intro = `
 
-### Simple Web Design
+### Simple Development
 
-In the beginning of time people thought the web was going to be for sharing research papers, and thus HTML was designed to format research papers. 
+People thought the web was going to be for sharing research papers, and thus HTML was designed to format research papers. 
 
 \`<p>Hello World, this is static text!</p>\`
 
@@ -75,7 +75,7 @@ https://html5lightning.deno.dev/example1.html
 
 Distributing your chat messages is the hard part. 
 
-Most of the time we solve this by using a centralized chat server. 
+Most of the time we solve this by using a centralized chat server in "The Cloud". 
 
 Questions?
 <hr>
@@ -86,7 +86,7 @@ db.trystero = `
 
 https://oxism.com/trystero
 
-Trystero is software by Dan Motzenbecker that bootstraps WebRTC (a protocol for Real-time communication for the web) connections using free infrastructure such as Bittorrent, Nostr, MQTT, IPFS, and Firebase (if you register for an account).
+Trystero is software by Dan Motzenbecker that bootstraps WebRTC (a protocol for Real-time communication for the web) "serverless" connections using free infrastructure such as Bittorrent, Nostr, MQTT, IPFS, and Firebase (if you register for an account).
 
 The Trystero API is very simple, you just create a room.
 
@@ -141,7 +141,11 @@ room.onPeerJoin(id => {
 
 room.onPeerLeave(id => {
   const get = document.getElementById(id)
-  if (id) {get.remove()}
+  if (get) {get.remove()}
+  const peerDiv = document.createElement('div')
+  peerDiv.id = id
+  peerDiv.textContent = id + ' has left.'
+  input.after(peerDiv)
 })
 
 receive((data, id) => {
@@ -156,13 +160,15 @@ https://html5lightning.deno.dev/example2.html
 <iframe src='./example2.html'></iframe>
 <div id='example2'></div>
 
+Questions?
+
 <hr>
 
 `
 
 db.wave = `
 
-Here's an example where we do the coolest thing in Google Wave that no ne does anymore:
+Add the best thing about Google Wave to your chat...
 
 \`\`\`
 import { joinRoom, selfId } from './trystero-torrent.min.js'
@@ -243,5 +249,83 @@ https://html5lightning.deno.dev/example3.html
 
 <iframe src='./example3.html'></iframe>
 <div id='example3'></div>
+
+Questions?!
+
+`
+
+db.bog = `
+### The Bog Protocol
+
+Let's add some ed25519 and sha256 on top of this serverless chatroom!
+
+Why? to authenticate message integrety even if we are storing the messages elsewhere.
+
+We send around messages this way:
+
+\`\`\`
+<ed25519 Public Key><Signature>
+\`\`\`
+
+Which opens to this:
+
+\`\`\`
+<timestamp><ed25519 Public Key><Previous Post Hash><Data Hash><Post Hash>
+\`\`\`
+
+And from that we create a message object:
+
+\`\`\`
+{
+  timestamp: <timestamp>,
+  author: <ed25519 Public Key>,
+  previous: <sha256 hash from previous post>,
+  data: <sha256 hash of post data>,
+  hash: <sha256 hash of post (ts, author, data)>,
+}
+\`\`\`
+
+That's the protocol, how do we use it?
+
+\`\`\`
+import { bogbot } from 'https://cdn.jsdelivr.net/gh/evbogue/bogbookv4/bogbot.js'
+
+const keypairDiv = Object.assign(document.createElement('div'), {textContent: bogbot.pubkey()})
+
+document.body.appendChild(keypairDiv)
+
+\`\`\`
+
+And then to sign messages we'll use 
+
+\`\`\`
+const signed = await bogbot.publish(input.value)
+
+const opened = await bogbot.open(signed)
+\`\`\`
+
+https://html5lightning.deno.dev/example4.html
+
+<iframe src='./example4.html'></iframe>
+<div id='example4'></div>
+
+Questions?!
+
+Homework:
+
++ Store the messages in localStorage or IndexedDB
++ Render markdown
++ Track the latest message so we can sync all message history
++ Add avatar images and names
++ Edit? Delete?
++ Do we need message types?
+
+If you're interested in exploring this topic further here are two implementations of the Bog Protocol: https://bogbook.com/ and https://decent.deno.dev/
+
+And I'm also happy to discuss how this protocol differs from other similar attempts such as IPFS, Nostr, Secure-Scuttlebot, and Bluesky. And ask me how about this differss from the ActivityPub "Fediverse".
+
+https://html5lightning.deno.dev/ <-- the talk.
+
+<div id='talkurl'></div>
 
 `

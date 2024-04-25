@@ -49,7 +49,11 @@ room.onPeerJoin(id => {
 
 room.onPeerLeave(id => {
   const get = document.getElementById(id)
-  if (id) {get.remove()}
+  if (get) {get.remove()}
+  const peerDiv = document.createElement('div')
+  peerDiv.id = id
+  peerDiv.textContent = id + ' has left.'
+  input.after(peerDiv)
 })
 
 receive((data, id) => {
