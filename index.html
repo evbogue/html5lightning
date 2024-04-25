@@ -1,0 +1,22 @@
+<link rel='stylesheet' type='text/css' href='style.css'>
+<script type='module' src='app.js'></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/monokai-sublime.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src='https://cdn.jsdelivr.net/npm/davidshimjs-qrcodejs@0.0.2/qrcode.min.js'></script>
+<script>
+  hljs.highlightAll()
+
+  window.onload = function() {
+    const codes = document.getElementsByTagName('code')
+    for (let i = 0; i < codes.length; i++) {
+      hljs.highlightBlock(codes[i])
+    }
+    const pres = document.getElementsByTagName('pre')
+    for (let i = 0; i < pres.length; i++) {
+      hljs.highlightBlock(pres[i])
+    }
+  }
+
+  
+</script>
