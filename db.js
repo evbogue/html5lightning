@@ -316,7 +316,13 @@ Homework:
 + Store the messages in localStorage or IndexedDB
 + Render markdown
 + Track the latest message so we can sync all message history
++ Create feeds of messages for profile pages and home feeds
++ Search
 + Add avatar images and names
++ Private direct messages
+
+Esoteric/practical questions:
+
 + Edit? Delete?
 + Do we need message types?
 
