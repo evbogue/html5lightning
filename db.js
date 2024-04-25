@@ -311,7 +311,9 @@ https://html5lightning.deno.dev/example4.html
 
 Questions?!
 
-Homework:
+<hr />
+
+### Homework
 
 + Store the messages in localStorage or IndexedDB
 + Render markdown
