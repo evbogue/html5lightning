@@ -322,7 +322,7 @@ Homework:
 
 If you're interested in exploring this topic further here are two implementations of the Bog Protocol: https://bogbook.com/ and https://decent.deno.dev/
 
-And I'm also happy to discuss how this protocol differs from other similar attempts such as IPFS, Nostr, Secure-Scuttlebot, and Bluesky. And ask me how about this differss from the ActivityPub "Fediverse".
+And I'm also happy to discuss how this protocol differs from other similar attempts such as IPFS, Nostr, Secure-Scuttlebot, and Bluesky. And ask me how about this differs from the ActivityPub "Fediverse".
 
 https://html5lightning.deno.dev/ <-- the talk.
 
